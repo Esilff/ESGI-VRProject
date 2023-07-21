@@ -29,6 +29,8 @@ public class GameManager : MonoBehaviour
     // Score variables
     [SerializeField]
     private int playerScore = 0;
+    [SerializeField]
+    int knockedDownCount = 0;
 
     private bool isGameActive = false;
     private bool isFrameActive = false;
@@ -53,6 +55,7 @@ public class GameManager : MonoBehaviour
         {
             pins[i] = pinParent.transform.GetChild(i).gameObject;
         }
+
         ResetGame();
     }
 
@@ -93,13 +96,17 @@ public class GameManager : MonoBehaviour
             PinKnockdownDetector pKD = pin.GetComponent<PinKnockdownDetector>();
 
             // Reset the pin to the upright position
-            pin.SetActive(true);
-            pin.transform.localPosition = pKD.startPosition;
-            pin.transform.GetChild(0).rotation = pKD.startRotation;
-
             Rigidbody pinRigidbody = pin.transform.GetChild(0).GetComponent<Rigidbody>();
             pinRigidbody.velocity = Vector3.zero;
             pinRigidbody.angularVelocity = Vector3.zero;
+
+            pin.SetActive(true);
+            pin.transform.GetChild(0).localPosition = pKD.startPosition;
+            pin.transform.GetChild(0).rotation = pKD.startRotation;
+
+            knockedDownCount = 0;
+
+            Debug.Log("Reset");
         }
     }
 
@@ -110,13 +117,15 @@ public class GameManager : MonoBehaviour
             PinKnockdownDetector pKD = pin.GetComponent<PinKnockdownDetector>();
 
             // Set only the upright pins back
-            pin.SetActive(pKD.IsUpright());
-            pin.transform.localPosition = pKD.startPosition;
-            pin.transform.GetChild(0).rotation = pKD.startRotation;
-
             Rigidbody pinRigidbody = pin.transform.GetChild(0).GetComponent<Rigidbody>();
             pinRigidbody.velocity = Vector3.zero;
             pinRigidbody.angularVelocity = Vector3.zero;
+
+            pin.SetActive(pKD.IsUpright());
+            pin.transform.GetChild(0).localPosition = pKD.startPosition;
+            pin.transform.GetChild(0).rotation = pKD.startRotation;
+
+            Debug.Log("Set");
         }
     }
 
@@ -127,8 +136,10 @@ public class GameManager : MonoBehaviour
         currentBall.GetComponent<Rigidbody>().velocity = Vector3.forward * 0.1f;
     }
 
-    public void OnBallThrown()
+    public IEnumerator OnBallThrown(float waitFor)
     {
+        yield return new WaitForSeconds(waitFor);
+
         // Detect pin knockdowns and calculate the score for this turn
         int knockedDownCount = CalculateKnockedDownPins();
         playerScore += knockedDownCount;
@@ -139,8 +150,6 @@ public class GameManager : MonoBehaviour
 
     private int CalculateKnockedDownPins()
     {
-        int knockedDownCount = 0;
-
         foreach (GameObject pin in pins)
         {
             PinKnockdownDetector pKD = pin.GetComponent<PinKnockdownDetector>();
@@ -156,7 +165,7 @@ public class GameManager : MonoBehaviour
 
     private void NextTurn()
     {
-        if (currentTry <= maxTry && CalculateKnockedDownPins() < 10)
+        if (currentTry < maxTry && !(knockedDownCount >= 10))
         {
             currentTry++;
 

@@ -22,17 +22,17 @@ public class OutOfBounds : MonoBehaviour
                 if (stringTagComponent.stringTag.Equals("Ball"))
                 {
                     gameManager.currentBall = collider.gameObject;
-                    gameManager.OnBallThrown();
+                    StartCoroutine(gameManager.OnBallThrown(5f));
                 }
             }
             else
             {
-                Debug.LogError("StringTag component not found on the collider.");
+                return;
             }
         }
         else
         {
-            Debug.LogError("Collider reference is null.");
+            return;
         }
     }
 

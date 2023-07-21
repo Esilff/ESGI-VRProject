@@ -7,6 +7,7 @@ public class PinKnockdownDetector : MonoBehaviour
     public int pinIndex;
     public Vector3 startPosition;
     public Quaternion startRotation;
+    private bool isInitialized = false;
 
     private void Awake()
     {
@@ -16,8 +17,12 @@ public class PinKnockdownDetector : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        startPosition = transform.localPosition;
-        startRotation = transform.GetChild(0).rotation;
+        if (!isInitialized)
+        {
+            startPosition = transform.GetChild(0).localPosition;
+            startRotation = Quaternion.Euler(0, 0, 0);
+            isInitialized = true;
+        }
     }
 
     public bool IsUpright()
@@ -26,6 +31,6 @@ public class PinKnockdownDetector : MonoBehaviour
         float angle = Quaternion.Angle(transform.GetChild(0).rotation, startRotation);
         Debug.Log("index :" + pinIndex +" angle :"+ angle);
 
-        return angle < 0.7f;
+        return angle < 0.85f;
     }
 }
