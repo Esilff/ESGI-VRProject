@@ -199,6 +199,7 @@ public class GameManager : MonoBehaviour
         GameObject secondRow = scoreCanvas.transform.GetChild(1).gameObject;
         
         firstRow.transform.GetChild((currentFrame-1)*2 +(currentTry-1)).GetComponent<Text>().text = knockedDownCount.ToString();
+        secondRow.transform.GetChild(currentFrame-1).GetComponent<Text>().text = playerScore.ToString();
     }
 }
 
