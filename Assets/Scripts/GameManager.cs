@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
     // Singleton instance of the GameManager
     public static GameManager Instance { get; private set; }
+    public GameObject scoreCanvas;
 
     [SerializeField]
     private GameObject ballDispenser;
@@ -124,6 +126,8 @@ public class GameManager : MonoBehaviour
             pin.SetActive(pKD.IsUpright());
             pin.transform.GetChild(0).localPosition = pKD.startPosition;
             pin.transform.GetChild(0).rotation = pKD.startRotation;
+            
+            knockedDownCount = 0;
 
             Debug.Log("Set");
         }
@@ -165,6 +169,8 @@ public class GameManager : MonoBehaviour
 
     private void NextTurn()
     {
+        ScoreManager();
+        
         if (currentTry < maxTry && !(knockedDownCount >= 10))
         {
             currentTry++;
@@ -185,6 +191,14 @@ public class GameManager : MonoBehaviour
     {
         // Display the final scores and any other end-game logic
         Debug.Log("Game Over");
+    }
+    
+    private void ScoreManager()
+    {
+        GameObject firstRow = scoreCanvas.transform.GetChild(0).gameObject;
+        GameObject secondRow = scoreCanvas.transform.GetChild(1).gameObject;
+        
+        firstRow.transform.GetChild((currentFrame-1)*2 +(currentTry-1)).GetComponent<Text>().text = knockedDownCount.ToString();
     }
 }
 
