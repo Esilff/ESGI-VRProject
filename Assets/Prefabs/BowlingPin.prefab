@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7714369718791725977}
+  - component: {fileID: 3278680207499254378}
   m_Layer: 0
   m_Name: BowlingPin
   m_TagString: Untagged
@@ -32,6 +33,21 @@ Transform:
   - {fileID: 4075825864970379263}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3278680207499254378
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8010648498333057249}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b9b0b6f84ad14f74b82507fcecde244f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pinIndex: 0
+  startPosition: {x: 0, y: 0, z: 0}
+  startRotation: {x: 0, y: 0, z: 0, w: 0}
 --- !u!1001 &4547095735888640020
 PrefabInstance:
   m_ObjectHideFlags: 0
